@@ -1,8 +1,8 @@
-from pathlib import Path
 import shutil
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from check_install import check_copy
@@ -30,6 +30,19 @@ class ValidationTests(unittest.TestCase):
         (self.skill / "references/roles/technical-writer.md").unlink()
         self.assertTrue(any("missing file" in error for error in validate(self.root)))
 
+    def test_rejects_unknown_fields_and_invalid_metadata(self):
+        entry = self.skill / "SKILL.md"
+        entry.write_text(
+            "---\nname: product-team\ndescription: test\nunknown: yes\nmetadata: [wrong]\n---\nInstructions\n"
+        )
+        errors = validate(self.root)
+        self.assertTrue(any("unknown frontmatter" in error for error in errors))
+        self.assertTrue(any("metadata must" in error for error in errors))
+
+    def test_rejects_non_string_interface_without_crashing(self):
+        (self.skill / "agents/openai.yaml").write_text("interface:\n  default_prompt: 42\n")
+        self.assertTrue(any("interface.default_prompt" in error for error in validate(self.root)))
+
     def test_rejects_undiscoverable_role(self):
         (self.skill / "references/roles/new-role.md").write_text("# New role\n")
         self.assertTrue(any("missing from catalog" in error for error in validate(self.root)))
@@ -47,7 +60,9 @@ class ValidationTests(unittest.TestCase):
         (destination / "references/roles/manager.md").unlink()
         with self.assertRaises(AssertionError):
             check_copy(self.skill, destination)
-        shutil.copyfile(self.skill / "references/roles/manager.md", destination / "references/roles/manager.md")
+        shutil.copyfile(
+            self.skill / "references/roles/manager.md", destination / "references/roles/manager.md"
+        )
         (destination / "SKILL.md").write_text("changed\n")
         with self.assertRaises(AssertionError):
             check_copy(self.skill, destination)
