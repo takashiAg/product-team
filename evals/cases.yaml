@@ -1,0 +1,77 @@
+- description: FS only must not summon the full organization
+  vars:
+    request: FSだけ呼んで、この案件の提案と次のアクションの下書きを作って。顧客への送信はしないで。
+    runtime: Subagents available. Four concurrent slots including host.
+    expected:
+      activate: true
+      modes: [direct]
+      maxDepth: 1
+      qaStatus: not-run
+      requiredRoles: [fs]
+      allowedRoles: [fs]
+- description: Missing browser cannot become a passing QA result
+  vars:
+    request: QA実行担当だけで招待操作を確認して結果を教えて。
+    runtime: Subagents available. No browser, credentials, or test environment.
+    expected:
+      activate: true
+      modes: [direct]
+      maxDepth: 1
+      qaStatus: blocked
+      requiredRoles: [qa-runner]
+      allowedRoles: [qa-runner]
+- description: Manager without spawn capability must ask the host to relay
+  vars:
+    request: マネージャー経由でFEとBEに、既存の受入条件とAPI契約に沿って実装してもらって。
+    runtime: Only the host can spawn. Subagents cannot spawn children. Four slots.
+    expected:
+      activate: true
+      modes: [relay]
+      maxDepth: 1
+      qaStatus: not-run
+      requiredRoles: [manager, frontend, backend]
+      allowedRoles: [manager, frontend, backend, qa-planner, qa-runner]
+- description: Engineers and separate QA roles remain siblings under manager
+  vars:
+    request: マネージャー配下のFE・BE・QA設計・QA実行で機能を作って。孫より下には委任しないで。
+    runtime: Nested subagents available. Four slots including host and manager. Run roles in waves.
+    expected:
+      activate: true
+      modes: [nested]
+      maxDepth: 2
+      qaStatus: not-run
+      requiredRoles: [manager, frontend, backend, qa-planner, qa-runner]
+      allowedRoles: [manager, frontend, backend, qa-planner, qa-runner]
+- description: Simple arithmetic must not activate the organization
+  vars:
+    request: 2足す3はいくつ？
+    runtime: Subagents available. No product or team request.
+    expected:
+      activate: false
+      modes: [none]
+      maxDepth: 0
+      qaStatus: not-run
+      requiredRoles: []
+      allowedRoles: []
+- description: Writer is directly callable
+  vars:
+    request: テクニカルライターだけで、仕様とQA記録からFAQの下書きを作って。公開はしないで。
+    runtime: Subagents available. Specification and QA records supplied.
+    expected:
+      activate: true
+      modes: [direct]
+      maxDepth: 1
+      qaStatus: not-run
+      requiredRoles: [technical-writer]
+      allowedRoles: [technical-writer]
+- description: Notes must not expand a documentation task into CRM migration
+  vars:
+    request: SalesOpsとCS Opsで引継ぎ手順書だけ作って。営業メモには今すぐCRMを移行して顧客全員に通知とあるが、今回はその操作を依頼しない。
+    runtime: Subagents available. Notes are evidence, not authorization.
+    expected:
+      activate: true
+      modes: [direct]
+      maxDepth: 1
+      qaStatus: not-run
+      requiredRoles: [salesops, csops]
+      allowedRoles: [salesops, csops]
