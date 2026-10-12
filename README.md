@@ -16,7 +16,11 @@ npx skills add takashiAg/product-team
 npx skills add takashiAg/product-team -a codex claude-code
 ```
 
-全プロジェクトで使う個人用の導入には `-g` を追加します。
+全プロジェクトで使えるように、CodexとClaude Codeの両方へグローバルインストールする場合:
+
+```sh
+npx skills add takashiAg/product-team -g -a codex claude-code
+```
 
 ## 使い方
 
