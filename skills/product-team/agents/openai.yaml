@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product Team"
+  short_description: "マネージャーと営業・CS・UX/UI・開発・QAの担当が協働する"
+  default_prompt: "$product-team を使って、マネージャーと必要な職能エージェントで課題を整理し、依頼した成果物の作成と検証まで進めてください。"
