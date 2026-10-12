@@ -90,16 +90,24 @@ QA実行は既存のPlaywrightや利用可能なブラウザツールを使い�
 
 ## 検証範囲
 
-GitHub Actionsの `Skill validation` で、PRとmainへの変更ごとに次を確認します。
+GitHub Actionsで、PRとmainへの変更ごとに次を確認します。採用理由と見送った候補は[ツール一覧](docs/quality-tooling.md)、ハーネスの使い方は[評価ガイド](docs/evaluation.md)を参照してください。
 
 - SKILL.mdのメタデータ、Codex用の表示設定、ローカル参照リンク、職能一覧から各定義への参照。
 - 壊れたYAML・欠落した参照・パッケージ外への依存を検出できること。
 - 変更中のスキルをCodex／Claude Code用に導入し、全ファイルの内容が一致すること。
+- textlint、用語辞書、markdownlint-cli2、actionlint、Ruffによる文章と検証コードのチェック。
+- Gitleaksによるシークレット検知と、promptfooのハーネス検証。
+
+`Gatekeeper`が必要なジョブを集約し、失敗・キャンセル・スキップ・結果欠落があれば拒否します。実モデルを使う評価は手動実行とし、fixtureの成功をスキルの品質確認とは扱いません。
 
 ローカルでの実行:
 
 ```sh
+npm ci --ignore-scripts
 python -m pip install -r requirements-ci.txt
+npm run lint
+ruff check scripts tests
+ruff format --check scripts tests
 python -m unittest discover -s tests -v
 python scripts/validate_skills.py
 python scripts/check_install.py

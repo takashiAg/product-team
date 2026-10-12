@@ -1,0 +1,7 @@
+{
+  "name": "product-team-evals",
+  "private": true,
+  "devDependencies": {
+    "promptfoo": "0.124.1"
+  }
+}

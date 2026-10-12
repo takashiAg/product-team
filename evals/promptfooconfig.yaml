@@ -1,0 +1,13 @@
+description: Product Team planning regression; fixture runs test the harness only
+prompts:
+  - file://prompt.cjs:withSkill
+  - file://prompt.cjs:baseline
+providers:
+  - file://fixture-provider.cjs
+tests: file://cases.yaml
+defaultTest:
+  assert:
+    - type: javascript
+      value: file://assertions.cjs
+evaluateOptions:
+  maxConcurrency: 1
