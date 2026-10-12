@@ -90,6 +90,23 @@ QA実行は既存のPlaywrightや利用可能なブラウザツールを使い�
 
 ## 検証範囲
 
+GitHub Actionsの `Skill validation` で、PRとmainへの変更ごとに次を確認します。
+
+- SKILL.mdのメタデータ、Codex用の表示設定、ローカル参照リンク、職能一覧から各定義への参照。
+- 壊れたYAML・欠落した参照・パッケージ外への依存を検出できること。
+- 変更中のスキルをCodex／Claude Code用に導入し、全ファイルの内容が一致すること。
+
+ローカルでの実行:
+
+```sh
+python -m pip install -r requirements-ci.txt
+python -m unittest discover -s tests -v
+python scripts/validate_skills.py
+python scripts/check_install.py
+```
+
+インストール検証にはNode.js・npm・Gitと、skills CLIを取得するネットワーク接続が必要です。CIはスキルの構造と配布内容を検証し、エージェントの判断品質や実画面の動作は検証しません。
+
 2026-10-12: スキル形式と相対リンクを検証。skills CLI 1.7.2でCodex・Claude Code向けに導入し、全29ファイルが元と一致することを確認しました。個別依頼、QA実行不能、孫非対応の3シナリオを独立レビューし、今回のCodex環境で子から孫を起動して結果を受け取る動作も確認しています。
 
 Claude Codeでの組織全体の実行、実プロダクトの開発・Playwright打鍵は未検証です。
