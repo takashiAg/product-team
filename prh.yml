@@ -1,0 +1,12 @@
+version: 1
+rules:
+  - expected: GitHub
+    patterns: /\bGithub\b/
+  - expected: Playwright
+    patterns: /\bPlaywrite\b/i
+  - expected: Claude Code
+    patterns: /\bClaudeCode\b/
+  - expected: TypeScript
+    patterns: /\bTypescript\b/
+  - expected: JavaScript
+    patterns: /\bJavascript\b/

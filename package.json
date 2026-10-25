@@ -1,0 +1,22 @@
+{
+  "name": "product-team-quality",
+  "private": true,
+  "scripts": {
+    "lint:markdown": "markdownlint-cli2",
+    "lint:text": "textlint 'README.md' 'docs/**/*.md' 'skills/**/*.md'",
+    "lint": "npm run lint:markdown && npm run lint:text",
+    "eval:smoke": "node evals/run.mjs smoke",
+    "eval:live": "node evals/run.mjs live",
+    "test:eval": "node --test evals/harness.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "0.23.3",
+    "skills": "1.7.2",
+    "textlint": "15.8.0",
+    "textlint-rule-preset-ja-technical-writing": "12.0.2",
+    "textlint-rule-prh": "6.1.0"
+  }
+}
